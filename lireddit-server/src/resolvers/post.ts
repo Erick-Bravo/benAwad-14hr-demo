@@ -1,5 +1,5 @@
 import { Query, Resolver } from "type-graphql";
-import { Post } from "src/entities/Post";
+import { Post } from "../entities/Post";
 
 @Resolver()
 export class PostResolver {

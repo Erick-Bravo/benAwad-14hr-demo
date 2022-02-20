@@ -11,7 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.PostResolver = void 0;
 const type_graphql_1 = require("type-graphql");
-const Post_1 = require("src/entities/Post");
+const Post_1 = require("../entities/Post");
 let PostResolver = class PostResolver {
     posts() {
         return "Hello world";
