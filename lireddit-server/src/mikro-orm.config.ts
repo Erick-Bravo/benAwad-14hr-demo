@@ -3,6 +3,7 @@ import path from "path";
 import { __prod__ } from "./constants";
 import { Post } from "./entities/Post";
 
+//__dirname is the absolute directory (default path before the path you are creating)
 const config: Options = {
   migrations: {
     path: path.join(__dirname, './migrations'),

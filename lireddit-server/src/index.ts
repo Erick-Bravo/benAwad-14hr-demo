@@ -1,13 +1,37 @@
 import { MikroORM } from "@mikro-orm/core";
 import { __prod__ } from "./constants";
-import { Post } from "./entities/Post";
+// import { Post } from "./entities/Post";
+import express from "express";
 import mikroConfig from "./mikro-orm.config";
+import { ApolloServer } from "apollo-server-express";
+import { buildSchema } from "type-graphql";
+import { HelloResolver } from "./resolvers/hello";
 
 const main = async () => {
   const orm = await MikroORM.init(mikroConfig);
+  await orm.getMigrator().up();
 
-  const post = orm.em.create(Post, { title: "my first post" });
-  await orm.em.persistAndFlush(post);
+  const app = express();
+
+  app.get("/", (_, res) => {
+    res.send("goodbye world")
+  })
+
+  const apolloServer = new ApolloServer({
+    schema: await buildSchema({
+      resolvers: [HelloResolver],
+      validate: false
+    })
+  });
+
+  //Creates a Graphql end point. You can check this by going to localhost:4000/graphql
+  await apolloServer.start();
+  apolloServer.applyMiddleware({ app });
+
+  app.listen(4000, () => {
+    console.log("server started on localhost:4000")
+  })
+
 };
 
 main();
