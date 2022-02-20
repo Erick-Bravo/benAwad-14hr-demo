@@ -1,3 +1,4 @@
+import "reflect-metadata"
 import { MikroORM } from "@mikro-orm/core";
 import { __prod__ } from "./constants";
 // import { Post } from "./entities/Post";
@@ -26,7 +27,7 @@ const main = async () => {
     context: () => ({ em: orm.em })
   });
 
-  //Creates a Graphql end point. You can check this by going to localhost:4000/graphql
+  //* Creates a Graphql end point. You can check this by going to localhost:4000/graphql
   await apolloServer.start();
   apolloServer.applyMiddleware({ app });
 
