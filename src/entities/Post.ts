@@ -1,6 +1,7 @@
 import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
 import { ObjectType, Field, Int } from "type-graphql";
 
+//stacked "decorators"
 @ObjectType()
 @Entity()
 export class Post {
