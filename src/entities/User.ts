@@ -1,10 +1,10 @@
 import { Entity, PrimaryKey, Property } from "@mikro-orm/core";
-import { ObjectType, Field, } from "type-graphql";
+import { ObjectType, Field } from "type-graphql";
 
 //stacked "decorators"
 @ObjectType()
 @Entity()
-export class Post {
+export class User {
   @Field()
   @PrimaryKey()
   id!: number;
@@ -18,6 +18,10 @@ export class Post {
   updatedAt = new Date();
   
   @Field()
-  @Property({type: "text"})
-  title!: string; 
+  @Property({ type: "text", unique: true })
+  username!: string; 
+
+  //No field to prevent selection of password
+  @Property({ type: "text" })
+  password!: string; 
 }

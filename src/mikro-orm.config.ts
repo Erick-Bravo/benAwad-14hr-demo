@@ -2,6 +2,7 @@ import { Options } from "@mikro-orm/core";
 import path from "path";
 import { __prod__ } from "./constants";
 import { Post } from "./entities/Post";
+import { User } from "./entities/User";
 
 //__dirname is the absolute directory (default path before the path you are creating)
 const config: Options = {
@@ -9,7 +10,7 @@ const config: Options = {
     path: path.join(__dirname, './migrations'),
     pattern: /^[\w-]+\d+\.[tj]s$/,
   },
-  entities: [Post],
+  entities: [Post, User],
   dbName: "lireddit",
   user: "erickbravo",
   password: "scaryterry",
