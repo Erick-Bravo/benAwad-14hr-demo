@@ -12,7 +12,7 @@ import {
 import argon2 from "argon2";
 
 //Different way you can use arguments in GraphQL
-//Input types we use for Mutations
+//Input types - we use for Mutations
 @InputType()
 class UsernamePasswordInput {
   @Field()
@@ -40,18 +40,41 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async register(
     @Arg("options") options: UsernamePasswordInput,
     @Ctx() { em }: MyContext
-  ) {
+  ): Promise<UserResponse> {
+    if (options.username.length <= 4) {
+        return {
+            errors: [
+                {
+                    field: "username",
+                    message: "username must be more than 4 characters",
+                }
+            ]
+        }
+    }
+    if (options.password.length <= 4) {
+        return {
+            errors: [
+                {
+                    field: "password",
+                    message: "password must be more than 4 characters",
+                }
+            ]
+        }
+    }
     const hashedpassword = await argon2.hash(options.password);
     const user = em.create(User, {
       username: options.username.toLocaleLowerCase(),
       password: hashedpassword,
     });
     await em.persistAndFlush(user);
-    return user;
+
+    return {
+        user
+    };
   }
 
   @Mutation(() => UserResponse)
