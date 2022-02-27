@@ -66,8 +66,8 @@ let UserResolver = class UserResolver {
                     {
                         field: "username",
                         message: "username must be more than 4 characters",
-                    }
-                ]
+                    },
+                ],
             };
         }
         if (options.password.length <= 4) {
@@ -76,8 +76,8 @@ let UserResolver = class UserResolver {
                     {
                         field: "password",
                         message: "password must be more than 4 characters",
-                    }
-                ]
+                    },
+                ],
             };
         }
         const hashedpassword = await argon2_1.default.hash(options.password);
@@ -85,9 +85,23 @@ let UserResolver = class UserResolver {
             username: options.username.toLocaleLowerCase(),
             password: hashedpassword,
         });
-        await em.persistAndFlush(user);
+        try {
+            await em.persistAndFlush(user);
+        }
+        catch (err) {
+            if (err.code === "23505") {
+                return {
+                    errors: [
+                        {
+                            field: "username",
+                            message: "username already taken",
+                        },
+                    ],
+                };
+            }
+        }
         return {
-            user
+            user,
         };
     }
     async login(options, { em }) {
@@ -116,7 +130,7 @@ let UserResolver = class UserResolver {
             };
         }
         return {
-            user
+            user,
         };
     }
 };

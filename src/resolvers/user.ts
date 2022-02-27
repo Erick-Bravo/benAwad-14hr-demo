@@ -46,34 +46,49 @@ export class UserResolver {
     @Ctx() { em }: MyContext
   ): Promise<UserResponse> {
     if (options.username.length <= 4) {
-        return {
-            errors: [
-                {
-                    field: "username",
-                    message: "username must be more than 4 characters",
-                }
-            ]
-        }
+      return {
+        errors: [
+          {
+            field: "username",
+            message: "username must be more than 4 characters",
+          },
+        ],
+      };
     }
     if (options.password.length <= 4) {
-        return {
-            errors: [
-                {
-                    field: "password",
-                    message: "password must be more than 4 characters",
-                }
-            ]
-        }
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "password must be more than 4 characters",
+          },
+        ],
+      };
     }
     const hashedpassword = await argon2.hash(options.password);
     const user = em.create(User, {
       username: options.username.toLocaleLowerCase(),
       password: hashedpassword,
     });
-    await em.persistAndFlush(user);
+
+    try {
+      await em.persistAndFlush(user);
+    } catch (err) {
+      if (err.code === "23505") {
+        //duplicate username error
+        return {
+          errors: [
+            {
+              field: "username",
+              message: "username already taken",
+            },
+          ],
+        };
+      }
+    }
 
     return {
-        user
+      user,
     };
   }
 
@@ -107,7 +122,7 @@ export class UserResolver {
       };
     }
     return {
-        user
+      user,
     };
   }
 }
