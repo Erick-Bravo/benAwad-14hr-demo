@@ -62,7 +62,8 @@ const main = async () => {
     context: ({ req, res }): MyContext => ({ em: orm.em, req, res }),
   });
 
-  //* Creates a Graphql end point. You can check this by going to localhost:4000/graphql
+  //* Creates a Graphql end point.  
+  // You can check this by going to localhost:4000/graphql
   await apolloServer.start();
   apolloServer.applyMiddleware({
     app,

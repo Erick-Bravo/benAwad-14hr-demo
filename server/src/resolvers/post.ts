@@ -50,7 +50,7 @@ export class PostResolver {
     @Arg("id") id: number,
     @Ctx() { em }: MyContext
   ): Promise<Boolean> {
-    await em.nativeDelete(Post, { id })
+    await em.nativeDelete(Post, { id });
     return true;
   }
 }
