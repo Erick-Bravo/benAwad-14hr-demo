@@ -30,12 +30,6 @@ const main = async () => {
 
   const app = express();
 
-  // app.use(
-  //   cors({
-  //     credentials: true,
-  //     origin: "http://localhost:4000",
-  //   })
-  // );
 
   app.use(
     session({
@@ -47,7 +41,7 @@ const main = async () => {
       cookie: {
         maxAge: 1000 * 60 * 60 * 24 * 365 * 10,
         httpOnly: true,
-        sameSite: "lax", // csrf
+        sameSite: "none", // csrf
         secure: __prod__, // cookie only works in https
       },
       saveUninitialized: false,
@@ -73,6 +67,7 @@ const main = async () => {
   apolloServer.applyMiddleware({
     app,
     // cors: { credentials: true, origin: "https://studio.apollographql.com" },
+    // cors: corsOptions
   });
 
   app.listen(4000, () => {
