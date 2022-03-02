@@ -19,7 +19,8 @@ mutation Register($username: String!, $password: String!){
         username
       }
     }
-  }`;
+  }
+  `;
 
 const register: React.FC<registerProps> = ({}) => {
   const [, register] = useMutation(REGISTER_MUT);
